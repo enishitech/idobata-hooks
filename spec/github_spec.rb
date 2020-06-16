@@ -639,18 +639,76 @@ describe Idobata::Hook::Github, type: :hook do
         HTML
       end
 
-      describe 'project created event' do
-        let(:fixture)           { 'project_created.json' }
-        let(:github_event_type) { 'project' }
+      describe 'project event' do
+        describe 'project created event' do
+          let(:fixture)           { 'project_created.json' }
+          let(:github_event_type) { 'project' }
 
-        it { expect(subject[:source]).to be_dom_equal <<~HTML }
-          <div>
-            <span><img src="https://avatars0.githubusercontent.com/u/2363?v=4" width="16" height="16" alt="" /></span>
-            <a href='https://github.com/darashi'>darashi</a>
-            created project
-            <a href='https://github.com/enishitech/test/projects/1'>Test project</a>
-          </div>
-        HTML
+          it { expect(subject[:source]).to be_dom_equal <<~HTML }
+            <div>
+              <span><img src="https://avatars0.githubusercontent.com/u/2363?v=4" width="16" height="16" alt="" /></span>
+              <a href='https://github.com/darashi'>darashi</a>
+              created project
+              <a href='https://github.com/enishitech/test/projects/1'>Test project</a>
+            </div>
+          HTML
+        end
+
+        describe 'project edited event' do
+          let(:fixture)           { 'project_edited.json' }
+          let(:github_event_type) { 'project' }
+
+          it { expect(subject[:source]).to be_dom_equal <<~HTML }
+            <div>
+              <span><img src="https://avatars0.githubusercontent.com/u/2363?v=4" width="16" height="16" alt="" /></span>
+              <a href='https://github.com/darashi'>darashi</a>
+              edited project
+              <a href='https://github.com/enishitech/test/projects/1'>Test project</a>
+            </div>
+          HTML
+        end
+
+        describe 'project closed event' do
+          let(:fixture)           { 'project_closed.json' }
+          let(:github_event_type) { 'project' }
+
+          it { expect(subject[:source]).to be_dom_equal <<~HTML }
+            <div>
+              <span><img src="https://avatars0.githubusercontent.com/u/2363?v=4" width="16" height="16" alt="" /></span>
+              <a href='https://github.com/darashi'>darashi</a>
+              closed project
+              <a href='https://github.com/enishitech/test/projects/2'>Test project to remove</a>
+            </div>
+          HTML
+        end
+
+        describe 'project reopened event' do
+          let(:fixture)           { 'project_reopened.json' }
+          let(:github_event_type) { 'project' }
+
+          it { expect(subject[:source]).to be_dom_equal <<~HTML }
+            <div>
+              <span><img src="https://avatars0.githubusercontent.com/u/2363?v=4" width="16" height="16" alt="" /></span>
+              <a href='https://github.com/darashi'>darashi</a>
+              reopened project
+              <a href='https://github.com/enishitech/test/projects/3'>close test</a>
+            </div>
+          HTML
+        end
+
+        describe 'project deleted event' do
+          let(:fixture)           { 'project_deleted.json' }
+          let(:github_event_type) { 'project' }
+
+          it { expect(subject[:source]).to be_dom_equal <<~HTML }
+            <div>
+              <span><img src="https://avatars0.githubusercontent.com/u/2363?v=4" width="16" height="16" alt="" /></span>
+              <a href='https://github.com/darashi'>darashi</a>
+              deleted project
+              Test project to remove
+            </div>
+          HTML
+        end
       end
 
       describe 'branch deleted as push event' do
