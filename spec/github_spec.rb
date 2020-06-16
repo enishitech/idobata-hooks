@@ -639,6 +639,20 @@ describe Idobata::Hook::Github, type: :hook do
         HTML
       end
 
+      describe 'project created event' do
+        let(:fixture)           { 'project_created.json' }
+        let(:github_event_type) { 'project' }
+
+        it { expect(subject[:source]).to be_dom_equal <<~HTML }
+          <div>
+            <span><img src="https://avatars0.githubusercontent.com/u/2363?v=4" width="16" height="16" alt="" /></span>
+            <a href='https://github.com/darashi'>darashi</a>
+            created project
+            <a href='https://github.com/enishitech/test/projects/1'>Test project</a>
+          </div>
+        HTML
+      end
+
       describe 'branch deleted as push event' do
         let(:fixture)           { 'branch_deleted_as_push.json' }
         let(:github_event_type) { 'push' }

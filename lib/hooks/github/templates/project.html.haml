@@ -1,0 +1,5 @@
+%div
+  %span= avatar_image_tag payload.sender.avatar_url
+  %a{href: payload.sender.html_url}= payload.sender.login
+  created project
+  %a{href: payload.project.html_url} #{payload.project.name}
